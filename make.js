@@ -4,27 +4,36 @@ const cheerio = require('cheerio');
 const $ = cheerio.load(fs.readFileSync('./template.html'));
 
 const main = () => {
-  const dir = getAllFiles('./hello');
   const container = $('#tree');
+  const baseDir = container.attr('base');
+  const absdir = container.attr('dir');
+  const dir = getAllFiles(absdir);
 
-  const out = makeUL(dir);
+  const out = makeUL(dir, baseDir);
   container.append(out);
   fs.writeFileSync('index.html', $.html());
 };
 
+const only_ending = (str) => str.split('/')[str.split('/').length - 1];
+const abs_fix = (href, baseDir) =>
+  href
+    .split('/')
+    .slice(baseDir.split('/').length - 1)
+    .join('/');
+
 const $$ = (tag = 'div', str = '') => $(`<${tag}>${str}</${tag}>`);
 
-const makeUL = (dir) => {
+const makeUL = (dir, baseDir = '.') => {
   let main = $$('ul');
   for (path in dir) {
     let li = $$('li');
     let a = $$('a');
     if (dir[path] == path) {
-      li.append(a.attr('href', path).text(path));
+      li.append(a.attr('href', abs_fix(path, baseDir)).text(only_ending(path)));
       main.append(li);
     } else {
-      li.text(path);
-      li.append(makeUL(dir[path]));
+      li.text(only_ending(path));
+      li.append(makeUL(dir[path], baseDir));
       main.append(li);
     }
   }
