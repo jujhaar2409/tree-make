@@ -8,6 +8,8 @@ const main = () => {
   const baseDir = container.attr('base');
   const absdir = container.attr('dir');
   const dir = getAllFiles(absdir);
+  container.removeAttr('base');
+  container.removeAttr('dir');
 
   const out = makeUL(dir, baseDir);
   container.append(out);
