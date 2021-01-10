@@ -1,7 +1,5 @@
 node_modules
-
 index.html
-
 template.html
-
 tree
+.DS_Store
