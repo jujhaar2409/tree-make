@@ -40,3 +40,9 @@ tree-make
 ```
 
 It should generate a file called index.html, which contains a ul with the structure of the specified directly!
+
+## Unlinking
+
+```bash
+npm unlink && sudo npm rm --global tree-make && npm ls --global tree-make
+```
